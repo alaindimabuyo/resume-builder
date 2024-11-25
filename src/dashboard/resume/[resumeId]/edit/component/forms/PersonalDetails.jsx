@@ -43,7 +43,7 @@ function PersonalDetails({ enabledNext }) {
         console.log(res);
         enabledNext(true);
         setLoading(false);
-        toast('Detail updated.');
+        toast('Detail updated!');
       },
       (error) => {
         setLoading(false);

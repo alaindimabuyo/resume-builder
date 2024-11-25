@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Delete } from 'lucide-react';
 
 const API_KEY = import.meta.env.VITE_STRAPI_API_KEY;
 const axiosClient = axios.create({
@@ -16,8 +17,14 @@ const GetUserResumes = (userEmail) =>
 
 const UpdateResumeDetail = (id, data) => axiosClient.put('/user-resume-builders/' + id, data);
 
+const GetResumeById = (id) => axiosClient.get('/user-resume-builders/' + id + '?populate=*');
+
+const DeleteResumeById = (id) => axiosClient.delete('/user-resume-builders/' + id);
+
 export default {
   CreateNewResume,
   GetUserResumes,
   UpdateResumeDetail,
+  GetResumeById,
+  DeleteResumeById,
 };

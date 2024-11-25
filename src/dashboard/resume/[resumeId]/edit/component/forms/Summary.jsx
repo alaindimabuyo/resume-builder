@@ -128,8 +128,8 @@ function Summary({ enabledNext }) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4">
+    <div>
+      <div className="p-5 shadow-lg mt-10 rounded-lg border-t-primary border-t-4">
         <h2 className="font-bold text-lg">Summary</h2>
         <p className="text-gray-600">Add a professional summary for your resume</p>
 

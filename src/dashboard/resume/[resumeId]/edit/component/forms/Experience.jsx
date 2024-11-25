@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import GlobalApi from '../../../../../../../service/GlobalApi';
 import { LoaderCircle } from 'lucide-react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const createFormField = () => ({
   title: '',
@@ -22,6 +23,12 @@ function Experience() {
 
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (resumeInfo?.experience && resumeInfo.experience.length > 0) {
+      setExperienceList(resumeInfo.experience);
+    }
+  }, []);
   const handleChange = (index, event) => {
     const newEntries = experienceList.slice();
     const { name, value } = event.target;
@@ -65,7 +72,7 @@ function Experience() {
       (res) => {
         console.log(res);
         setLoading(false);
-        toast('Details updated !');
+        toast('Details updated!');
       },
       (error) => {
         setLoading(false);
@@ -79,24 +86,40 @@ function Experience() {
         <h2 className="font-bold text-lg">Professional Experience</h2>
         <p>Add your previous Job Experience</p>
         <div>
-          {experienceList.map((field, index) => (
+          {experienceList.map((item, index) => (
             <div key={index}>
               <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
                 <div>
                   <label>Position Title</label>
-                  <Input name="title" onChange={(event) => handleChange(index, event)} />
+                  <Input
+                    name="title"
+                    onChange={(event) => handleChange(index, event)}
+                    defaultValue={item.title}
+                  />
                 </div>
                 <div>
                   <label>Company Name</label>
-                  <Input name="companyName" onChange={(event) => handleChange(index, event)} />
+                  <Input
+                    name="companyName"
+                    onChange={(event) => handleChange(index, event)}
+                    defaultValue={item.companyName}
+                  />
                 </div>
                 <div>
                   <label>City</label>
-                  <Input name="city" onChange={(event) => handleChange(index, event)} />
+                  <Input
+                    name="city"
+                    onChange={(event) => handleChange(index, event)}
+                    defaultValue={item.city}
+                  />
                 </div>
                 <div>
                   <label>State</label>
-                  <Input name="state" onChange={(event) => handleChange(index, event)} />
+                  <Input
+                    name="state"
+                    onChange={(event) => handleChange(index, event)}
+                    defaultValue={item.state}
+                  />
                 </div>
                 <div>
                   <label>Start Date</label>
@@ -104,6 +127,7 @@ function Experience() {
                     type="date"
                     name="startDate"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item.startDate}
                   />
                 </div>
                 <div>
@@ -112,11 +136,13 @@ function Experience() {
                     type="date"
                     name="endDate"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item.endDate}
                   />
                 </div>
                 <div className="col-span-2">
                   <RichTextEditor
                     index={index}
+                    defaultValue={item.workSummary}
                     onRichEditorChange={(event) =>
                       handleRichTextEditor(event, 'workSummary', index)
                     }

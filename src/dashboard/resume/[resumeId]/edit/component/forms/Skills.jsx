@@ -17,6 +17,13 @@ function Skills() {
       rating: 0,
     },
   ]);
+
+  useEffect(() => {
+    if (resumeInfo?.skills && resumeInfo.skills.length > 0) {
+      setSkillsList(resumeInfo.skills);
+    }
+  }, []);
+
   const { resumeId } = useParams();
   const [loading, setLoading] = useState(false);
 
@@ -38,9 +45,10 @@ function Skills() {
     setLoading(true);
     const data = {
       data: {
-        skills: skillsList,
+        skills: skillsList.map(({ id, ...rest }) => rest),
       },
     };
+
     GlobalApi.UpdateResumeDetail(resumeId, data).then(
       (res) => {
         console.log(res);
@@ -72,6 +80,7 @@ function Skills() {
               <Input
                 className="w-full"
                 onChange={(e) => handleChange(index, 'name', e.target.value)}
+                defaultValue={item.name}
               />
             </div>
             <Rating

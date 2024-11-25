@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ResumeInfoContext } from '@/context/ResumeInfoContext';
 import { Braces, Brain, LoaderCircle } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   BtnBold,
   BtnBulletList,
@@ -26,13 +26,24 @@ import { AIChatSession } from '../../../service/AIModal';
 const PROMPT =
   'position title: {positionTitle}, Depends on position title give me 5-7 bullet points for my experience in resume. Return only bullet points without any additional text or formatting.';
 
-function RichTextEditor({ onRichEditorChange, index }) {
+function RichTextEditor({ onRichEditorChange, index, defaultValue }) {
+  const { resumeInfo } = useContext(ResumeInfoContext);
   const [value, setValue] = useState('');
-  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [loading, setLoading] = useState(false);
 
+  // Set initial value and update when defaultValue changes
+  useEffect(() => {
+    // First try to get value from resumeInfo
+    const savedValue = resumeInfo?.experience?.[index]?.workSummary;
+    if (savedValue) {
+      setValue(savedValue);
+    } else if (defaultValue) {
+      // Fallback to defaultValue if no saved value exists
+      setValue(defaultValue);
+    }
+  }, [defaultValue, resumeInfo?.experience, index]);
+
   const formatAIResponse = (text) => {
-    // Split the text into lines and create a properly formatted HTML list
     const lines = text
       .replace(/{|}|\[|\]/g, '')
       .split('\n')
@@ -45,7 +56,7 @@ function RichTextEditor({ onRichEditorChange, index }) {
 
   const GenerateSummaryFromAI = async () => {
     setLoading(true);
-    if (!resumeInfo.experience[index].title) {
+    if (!resumeInfo?.experience?.[index]?.title) {
       toast('Please Add Position Title');
       setLoading(false);
       return;
