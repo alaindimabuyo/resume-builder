@@ -3,7 +3,7 @@ import { Delete } from 'lucide-react';
 
 const API_KEY = import.meta.env.VITE_STRAPI_API_KEY;
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:1337/api/',
+  baseURL: import.meta.env.VITE_BASE_URL + '/api/',
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${API_KEY}`,
